@@ -1,0 +1,32 @@
+---------------------------------------------------------------------------
+Algorithm next value (k)
+{
+repeat 
+{
+x[k]=(x[k]+1)mod(m+1); // next highest color
+if(x[k]=0) then return // all colors used
+for j=1 to n do
+{
+if (G(k,j)!=0 and x[k]=x[j]) // adjacent vertice hve same color
+then break;
+}
+if(j=n+1) then return; // new color
+}until(false) //otherwise try to find another color
+}
+--------------------------------------------------------------------------
+
+Algorith mColoring(k)
+{
+reprat
+{//Generate all legal assignmesnts of x[k]
+nextValue(k);
+if(x[k]=0) then return; //no color possible 
+if (k=n) then //at most m color have been used
+write(x[1:n]);
+else
+mColoring(k+1);
+}
+until(false);
+}
+
+---------------------------------------------------------------------------

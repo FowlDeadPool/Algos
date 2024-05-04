@@ -1,0 +1,448 @@
+1) Assume that youre friend recruited as some officer for collecting names from somewhere and an array of string . Where people may enter name and sur name as 3 character only. Your friend suppose to collect persons details surname and name but he collected in different way. Now you need to write a java program to perform a linear search operation for finding a person name either using sur name or with name.
+In case of search failure , return the number of additional search required 
+
+2) Binary search for finding first occurence of the given surname or complete name. In case of search failure , return -1;
+
+    
+
+// Java program to solve N Queen Problem using backtracking
+
+import java.util.*;
+
+class GFG {
+	static int N = 4;
+
+	// ld is an array where its indices indicate row-col+N-1
+	// (N-1) is for shifting the difference to store
+	// negative indices
+	static int[] ld = new int[30];
+
+	// rd is an array where its indices indicate row+col
+	// and used to check whether a queen can be placed on
+	// right diagonal or not
+	static int[] rd = new int[30];
+
+	// Column array where its indices indicates column and
+	// used to check whether a queen can be placed in that
+	// row or not
+	static int[] cl = new int[30];
+
+	// A utility function to print solution
+	static void printSolution(int board[][])
+	{
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++)
+				System.out.printf(" %d ", board[i][j]);
+			System.out.printf("\n");
+		}
+	}
+
+	// A recursive utility function to solve N
+	// Queen problem
+	static boolean solveNQUtil(int board[][], int col)
+	{
+		// Base case: If all queens are placed
+		// then return true
+		if (col >= N)
+			return true;
+
+		// Consider this column and try placing
+		// this queen in all rows one by one
+		for (int i = 0; i < N; i++) {
+			// Check if the queen can be placed on
+			// board[i][col]
+
+			// To check if a queen can be placed on
+			// board[row][col].We just need to check
+			// ld[row-col+n-1] and rd[row+coln] where
+			// ld and rd are for left and right
+			// diagonal respectively
+			if ((ld[i - col + N - 1] != 1
+				&& rd[i + col] != 1)
+				&& cl[i] != 1) {
+				// Place this queen in board[i][col]
+				board[i][col] = 1;
+				ld[i - col + N - 1] = rd[i + col] = cl[i]
+					= 1;
+
+				// Recur to place rest of the queens
+				if (solveNQUtil(board, col + 1))
+					return true;
+
+				// If placing queen in board[i][col]
+				// doesn't lead to a solution, then
+				// remove queen from board[i][col]
+				board[i][col] = 0; // BACKTRACK
+				ld[i - col + N - 1] = rd[i + col] = cl[i]
+					= 0;
+			}
+		}
+
+		// If the queen cannot be placed in any row in
+		// this column col then return false
+		return false;
+	}
+
+	// This function solves the N Queen problem using
+	// Backtracking. It mainly uses solveNQUtil() to
+	// solve the problem. It returns false if queens
+	// cannot be placed, otherwise, return true and
+	// prints placement of queens in the form of 1s.
+	// Please note that there may be more than one
+	// solutions, this function prints one of the
+	// feasible solutions.
+	static boolean solveNQ()
+	{
+		int board[][] = { { 0, 0, 0, 0 },
+						{ 0, 0, 0, 0 },
+						{ 0, 0, 0, 0 },
+						{ 0, 0, 0, 0 } };
+
+		if (solveNQUtil(board, 0) == false) {
+			System.out.printf("Solution does not exist");
+			return false;
+		}
+
+		printSolution(board);
+		return true;
+	}
+
+	// Driver Code
+	public static void main(String[] args) 
+	{ 
+		solveNQ(); 
+	}
+}
+
+// This code is contributed by Princi Singh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Java program for solution of
+M Coloring problem using backtracking */
+
+public class mColoringProblem {
+	final int V = 4;
+	int color[];
+
+	/* A utility function to check
+	if the current color assignment
+	is safe for vertex v */
+	boolean isSafe(int v, int graph[][], int color[], int c)
+	{
+		for (int i = 0; i < V; i++)
+			if (graph[v][i] == 1 && c == color[i])
+				return false;
+		return true;
+	}
+
+	/* A recursive utility function
+	to solve m coloring problem */
+	boolean graphColoringUtil(int graph[][], int m,
+							int color[], int v)
+	{
+		/* base case: If all vertices are
+		assigned a color then return true */
+		if (v == V)
+			return true;
+
+		/* Consider this vertex v and try
+		different colors */
+		for (int c = 1; c <= m; c++) {
+			/* Check if assignment of color c to v
+			is fine*/
+			if (isSafe(v, graph, color, c)) {
+				color[v] = c;
+
+				/* recur to assign colors to rest
+				of the vertices */
+				if (graphColoringUtil(graph, m, color,
+									v + 1))
+					return true;
+
+				/* If assigning color c doesn't lead
+				to a solution then remove it */
+				color[v] = 0;
+			}
+		}
+
+		/* If no color can be assigned to
+		this vertex then return false */
+		return false;
+	}
+
+	/* This function solves the m Coloring problem using
+	Backtracking. It mainly uses graphColoringUtil()
+	to solve the problem. It returns false if the m
+	colors cannot be assigned, otherwise return true
+	and prints assignments of colors to all vertices.
+	Please note that there may be more than one
+	solutions, this function prints one of the
+	feasible solutions.*/
+	boolean graphColoring(int graph[][], int m)
+	{
+		// Initialize all color values as 0. This
+		// initialization is needed correct
+		// functioning of isSafe()
+		color = new int[V];
+		for (int i = 0; i < V; i++)
+			color[i] = 0;
+
+		// Call graphColoringUtil() for vertex 0
+		if (!graphColoringUtil(graph, m, color, 0)) {
+			System.out.println("Solution does not exist");
+			return false;
+		}
+
+		// Print the solution
+		printSolution(color);
+		return true;
+	}
+
+	/* A utility function to print solution */
+	void printSolution(int color[])
+	{
+		System.out.println("Solution Exists: Following"
+						+ " are the assigned colors");
+		for (int i = 0; i < V; i++)
+			System.out.print(" " + color[i] + " ");
+		System.out.println();
+	}
+
+	// Driver code
+	public static void main(String args[])
+	{
+		mColoringProblem Coloring = new mColoringProblem();
+		/* Create following graph and
+		test whether it is
+		3 colorable
+		(3)---(2)
+		| / |
+		| / |
+		| / |
+		(0)---(1)
+		*/
+		int graph[][] = {
+			{ 0, 1, 1, 1 },
+			{ 1, 0, 1, 0 },
+			{ 1, 1, 0, 1 },
+			{ 1, 0, 1, 0 },
+		};
+		int m = 3; // Number of colors
+
+		// Function call
+		Coloring.graphColoring(graph, m);
+	}
+}
+// This code is contributed by Abhishek Shankhadhar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import java.io.*;
+import java.util.*;
+
+class Node {
+    int color = 1;
+    Set<Integer> edges = new HashSet<>();
+}
+
+public class mColoring {
+    static int possiblePaint(ArrayList<Node> nodes, int n, int m) {
+        ArrayList<Integer> visited = new ArrayList<>();
+        for (int i = 0; i <= n; i++) {
+            visited.add(0);
+        }
+
+        int maxColors = 1;
+
+        for (int sv = 1; sv <= n; sv++) {
+            if (visited.get(sv) > 0) {
+                continue;
+            }
+
+            visited.set(sv, 1);
+            Queue<Integer> q = new LinkedList<>();
+            q.add(sv);
+
+            while (!q.isEmpty()) {
+                int top = q.poll();
+                for (int it : nodes.get(top).edges) {
+                    if (nodes.get(top).color == nodes.get(it).color) {
+                        nodes.get(it).color += 1;
+                    }
+
+                    maxColors = Math.max(maxColors, Math.max(nodes.get(top).color, nodes.get(it).color));
+                    if (maxColors > m) {
+                        return 0;
+                    }
+
+                    if (visited.get(it) == 0) {
+                        visited.set(it, 1);
+                        q.add(it);
+                    }
+                }
+            }
+        }
+        return 1;
+    }
+
+    public static void main(String[] args) {
+        int n = 4;
+        int[][] graph = {{0, 1, 1, 1}, {1, 0, 1, 0}, {1, 1, 0, 1}, {1, 0, 1, 0}};
+        int m = 3;
+
+        ArrayList<Node> nodes = new ArrayList<>();
+
+        for (int i = 0; i <= n; i++) {
+            nodes.add(new Node());
+        }
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (graph[i][j] > 0) {
+                    nodes.get(i + 1).edges.add(j + 1);
+                    nodes.get(j + 1).edges.add(i + 1);
+                }
+            }
+        }
+
+        int res = possiblePaint(nodes, n, m);
+        if (res == 1) {
+            System.out.println("It is possible to color all the nodes!!");
+        } else {
+            System.out.println("No solution exists!!");
+        }
+    }
+}
+
+
+
+----------------------------------------------------------------------------------------------------------------
+class HamiltonianCycle
+{
+	final int V = 5;
+	int path[];
+
+	boolean isSafe(int v, int graph[][], int path[], int pos)
+	{
+		if (graph[path[pos - 1]][v] == 0)
+			return false;
+
+		for (int i = 0; i < pos; i++)
+			if (path[i] == v)
+				return false;
+
+		return true;
+	}
+
+	boolean hamCycleUtil(int graph[][], int path[], int pos)
+	{
+		if (pos == V)
+		{
+			if (graph[path[pos - 1]][path[0]] == 1)
+				return true;
+			else
+				return false;
+		}
+
+		for (int v = 1; v < V; v++)
+		{
+			if (isSafe(v, graph, path, pos))
+			{
+				path[pos] = v;
+
+				if (hamCycleUtil(graph, path, pos + 1) == true)
+					return true;
+
+				path[pos] = -1;
+			}
+		}
+
+		return false;
+	}
+
+	
+	int hamCycle(int graph[][])
+	{
+		path = new int[V];
+		for (int i = 0; i < V; i++)
+			path[i] = -1;
+
+		
+		path[0] = 0;
+		if (hamCycleUtil(graph, path, 1) == false)
+		{
+			System.out.println("\nSolution does not exist");
+			return 0;
+		}
+
+		printSolution(path);
+		return 1;
+	}
+
+	
+	void printSolution(int path[])
+	{
+		System.out.println("Solution Exists: Following" +
+						" is one Hamiltonian Cycle");
+		for (int i = 0; i < V; i++)
+			System.out.print(" " + path[i] + " ");
+
+		System.out.println(" " + path[0] + " ");
+	}
+
+	
+	public static void main(String args[])
+	{
+		HamiltonianCycle hamiltonian =
+								new HamiltonianCycle();
+		int graph1[][] = {
+            {0, 1, 0, 1, 0},
+			{1, 0, 1, 1, 1},
+			{0, 1, 0, 0, 1},
+			{1, 1, 0, 0, 1},
+			{0, 1, 1, 1, 0},
+		};
+
+		hamiltonian.hamCycle(graph1);
+
+		int graph2[][] = {{0, 1, 0, 1, 0},
+			{1, 0, 1, 1, 1},
+			{0, 1, 0, 0, 1},
+			{1, 1, 0, 0, 0},
+			{0, 1, 1, 0, 0},
+		};
+
+		hamiltonian.hamCycle(graph2);
+	}
+}

@@ -1,0 +1,24 @@
+Algorithm 
+
+E number of edge 
+f(e) flow of edge 
+C(e) capacity of edge 
+
+1) Initialize : max_flow = 0  
+                f(e) = 0 for every edge 'e' in E 
+            
+2) Repeat search for an s-t path P while it exists.   
+   a) Find if there is a path from s to t using BFS
+      or DFS. A path exists if f(e) < C(e) for 
+      every edge e on the path.
+   b) If no path found, return max_flow.
+   c) Else find minimum edge value for path P
+        
+      // Our flow is limited by least remaining
+      // capacity edge on path P.
+      (i) flow = min(C(e)- f(e)) for path P ]
+             max_flow += flow
+      (ii) For all edge e of path increment flow 
+             f(e) += flow
+
+3) Return max_flow 
